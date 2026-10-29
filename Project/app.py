@@ -88,7 +88,7 @@ def goto_details(tmdb_id: int):
 @st.cache_data(ttl=30)  # short cache for public (non-user) endpoints only
 def api_get_json(path: str, params: dict | None = None):
     try:
-        r = requests.get(f"{API_BASE}{path}", params=params, timeout=25)
+        r = requests.get(f"{API_BASE}{path}", params=params, timeout=60)
         if r.status_code >= 400:
             return None, f"HTTP {r.status_code}: {r.text[:300]}"
         return r.json(), None
@@ -96,7 +96,7 @@ def api_get_json(path: str, params: dict | None = None):
         return None, f"Request failed: {e}"
 
 
-def api_request(method: str, path: str, params=None, json=None, timeout: int = 25):
+def api_request(method: str, path: str, params=None, json=None, timeout: int = 60):
     """Uncached request that sends the login token. Use for all /auth and /user calls."""
     headers = {}
     token = st.session_state.get("token")
